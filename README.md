@@ -1,0 +1,2 @@
+# School AMS
+ accounting system
