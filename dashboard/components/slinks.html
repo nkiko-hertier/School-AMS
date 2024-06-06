@@ -1,0 +1,12 @@
+<?php
+$links = [
+    ['name' => 'Users',      'path' => 'Users',          'icon' => 'fa fa-user'],
+    ['name' => 'Setting', 'path' => '#', 'icon' => 'fa fa-wrench']
+];
+
+foreach($links as $link) {
+    $path = empty($link['path']) ? '/' . $link['name'] : '/' . $link['path'];
+    $icon = isset($link['icon']) ? '<i class="' . $link['icon'] . ' mr-2"></i>' : '';
+    echo '<a href="' . ROOT_DIR . $path . '" class="hover:text-white hover:pl-7 pl-5 bg-[#0000001f] rounded-lg py-2">' . $icon . $link['name'] . '</a>    ';
+}
+?>

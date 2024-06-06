@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Rewrite /edit/?module=MODULE&id=1 to /MODULE/edit/1
+RewriteCond %{QUERY_STRING} ^module=([^&]+)&id=([^&]+)$
+RewriteRule ^edit/?$ /%1/edit/%2? [L,R=301]
+
+# Rewrite /edit/?module=MODULE to /MODULE/add/
+RewriteCond %{QUERY_STRING} ^module=([^&]+)$
+RewriteRule ^edit/?$ /%1/add/? [L,R=301]

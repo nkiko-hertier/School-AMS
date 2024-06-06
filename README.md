@@ -1,2 +1,2 @@
-# School AMS
- accounting system
+# LMS
+ Loan Management System
