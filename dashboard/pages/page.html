@@ -1,13 +1,6 @@
 <?php
+include_once('../db.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
-// Query to select all loans
-if($_SESSION['role'] == 'customer'){
-    $id = $_SESSION['user_id'];
-    $sql = "SELECT * FROM loans WHERE customer_id = $id";
-} else {
-    $sql = "SELECT * FROM loans";
-}
-$result = $conn->query($sql);
 ?>
 <div class="container h-fit py-12 rounded-md px-4">
 <div class='flex flex-wrap justify-between w-full mb-3 px-5 py-4 p-2'>
@@ -19,43 +12,29 @@ $result = $conn->query($sql);
     <div class="overflow-x-auto">
         <table class="divide-y divide-gray-300 w-full">
             <thead>
-                <tr class="bg-gray-50 dark:bg-[#1d1d21]">
-                    <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">ID</th>
-                    <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">Customer ID</th>
-                    <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">Loan Type</th>
-                    <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">Loan Amount</th>
-                    <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">Interest Rate</th>
-                    <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">Term</th>
-                    <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">Payment status</th>
-                    <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">Status</th>
+            <tr class="bg-gray-50 dark:bg-[#1d1d21]">
+                <?php
+                $tbl   = $_GET['module'];
+                $table = $db_object[$tbl];
+                !$table && die('No data found for selcted table');
+                foreach($table as $key){
+                ?>
+                    <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100"><?=$key['name']?></th>
+                <?php
+                }
+                ?>
                 </tr>
             </thead>
             <tbody class="dark:bg-[#18181b] bg-white divide-y divide-gray-300">
                 <?php
+                $results = new Table($db, $tbl);
                 if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
+                    while ($row = $result->fetchAll()) {
                         echo "<tr class='border-none whitespace-nowrap'>";
-                        echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . $row["id"] . "</td>";
-                        echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . $row["customer_id"] . "</td>";
-                        echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . $row["loan_type"] . "</td>";
-                        echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . $row["loan_amount"] . "</td>";
-                        echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . $row["interest_rate"] . "</td>";
-                        echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . $row["term"] . "</td>";
-                        ?>
-                        <td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'><?=$row["payment_status"]? '<p class="text-green-500 text-sm">Paid</p>' : '<p class="text-red-500 text-sm">Unpaid</p>' ?> </td>
-                        <?php
-                            if($_SESSION['role'] == 'customer' ){
-                        ?>
-                        <td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'><?=$row["status"]? 'Approved' : '<p class="text-green-500 p-1 rounded-lg bg-[#2ec55e29] text-sm">Pending</p>' ?> </td>
-                        <?php
-                            }else{
-                        ?>
-                        <td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'><?=$row["status"]? 'Approved' : '<p onclick="ApproveLoan(' . $row['id'] . ', `'. $row['term'] .'`)" class="text-green-500 p-1 rounded-lg bg-[#2ec55e29] text-sm">Approve Now</p>' ?> </td>
-                        <?php
+                        foreach($table as $key){
+                            $name = $key['name'];
+                            echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . $row[$name] . "</td>";
                         }
-                    ?>
-
-                            <?php
                         echo "</tr>";
                     }
                 } else {

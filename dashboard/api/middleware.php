@@ -57,15 +57,3 @@ class Table {
 // Example usage:
 $db = new Database('localhost', 'school_accounting', 'root', '');
 $studentsTable = $db->getTable('students');
-
-// Insert a new student
-$studentsTable->insert([
-    'name' => 'John Doe',
-    'email' => 'john@example.com',
-    'date_of_birth' => '2000-01-01',
-    'enrollment_date' => '2024-06-06'
-]);
-
-// Fetch all students
-$students = $studentsTable->fetchAll();
-print_r($students);
