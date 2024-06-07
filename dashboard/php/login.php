@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["email"] = $row["email"];
         
         // Redirect to dashboard page
-        header("Location: ../home/");
+        header("Location: ../pages/");
         exit();
     } else {
         // User not found or incorrect credentials

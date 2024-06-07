@@ -55,5 +55,5 @@ class Table {
 }
 
 // Example usage:
-$db = new Database('localhost', 'school_accounting', 'root', '');
-$studentsTable = $db->getTable('students');
+$db = new Database('localhost', 'school_ams', 'root', '');
+//$studentsTable = $db->getTable('students');

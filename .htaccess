@@ -1,4 +1,6 @@
+
 RewriteEngine On
+AddType application/x-httpd-php .html .htm
 
 # Rewrite /dashboard/?page=home to /dashboard/page/home
 RewriteCond %{QUERY_STRING} ^page=([^&]+)$

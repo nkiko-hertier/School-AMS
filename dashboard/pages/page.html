@@ -1,10 +1,12 @@
+
 <?php
 include_once('../db.php');
+include_once('../api/middleware.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
 ?>
 <div class="container h-fit py-12 rounded-md px-4">
 <div class='flex flex-wrap justify-between w-full mb-3 px-5 py-4 p-2'>
-  <h1 class='sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-600 dark:text-slate-400'>View Loans</h1>
+  <h1 class='sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-600 dark:text-slate-400'>View <?=$_GET['module']?></h1>
   <a hidden href="./create" class="block h-fit text-sm w-fit p-2 py-2 bg-indigo-400 dark:bg-[#818cf842] text-white rounded-sm">Add Loarn</a>
 </div>
 
@@ -16,7 +18,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
                 <?php
                 $tbl   = $_GET['module'];
                 $table = $db_object[$tbl];
-                !$table && die('No data found for selcted table');
+                //!$table && die('No data found for selcted table');
                 foreach($table as $key){
                 ?>
                     <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100"><?=$key['name']?></th>
@@ -28,12 +30,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
             <tbody class="dark:bg-[#18181b] bg-white divide-y divide-gray-300">
                 <?php
                 $results = new Table($db, $tbl);
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetchAll()) {
+                
+                $tbl   = $_GET['module'];
+                $table = $db_object[$tbl];
+                if ($results) {
+                    $table = $results; // Assuming fetchAll() gets all the rows
+                    foreach ($table as $row) {
                         echo "<tr class='border-none whitespace-nowrap'>";
-                        foreach($table as $key){
-                            $name = $key['name'];
-                            echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . $row[$name] . "</td>";
+                        foreach ($row as $key => $value) {
+                            echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . htmlspecialchars($value) . "</td>";
                         }
                         echo "</tr>";
                     }
