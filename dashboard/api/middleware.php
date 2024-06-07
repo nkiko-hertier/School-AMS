@@ -24,6 +24,7 @@ class Table {
     public function __construct($pdo, $table) {
         $this->pdo = $pdo;
         $this->table = $table;
+        $this->conn = mysqli_connect('localhost', 'root','', 'school_ams');
     }
 
     public function insert($data) {

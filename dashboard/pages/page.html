@@ -33,7 +33,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
                 $results = $results->fetchAll();
                 
                 $tbl   = $_GET['module'];
-                $table = $db_object[$tbl];
+                $tables = $db_object[$tbl];
                 if ($results) {
                     $table = $results; // Assuming fetchAll() gets all the rows
                     foreach ($table as $row) {
