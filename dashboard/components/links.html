@@ -1,14 +1,15 @@
 <?php
-$links = [
+include_once('../db.php');
+/* $links = [
     ['name' => 'Home',      'path' => '',          'icon' => 'fa fa-home'],
     ['name' => 'Customers', 'path' => 'customers', 'icon' => 'fa fa-users'],
     ['name' => 'Loans',     'path' => 'loans',     'icon' => 'fa fa-window-restore'],
     ['name' => 'Analytics', 'path' => '#', 'icon' => 'fa fa-chart-bar']
-];
+]; */
 
-foreach($links as $link) {
-    $path = empty($link['path']) ? '/' . $link['name'] : '/' . $link['path'];
-    $icon = isset($link['icon']) ? '<i class="' . $link['icon'] . ' mr-2"></i>' : '';
-    echo '<a href="' . ROOT_DIR . $path . '" class="hover:text-white hover:pl-7 pl-5 bg-[#0000001f] rounded-lg py-2">' . $icon . $link['name'] . '</a>    ';
+foreach($db_object as $key => $value) {
+    $path = '/dashboard/page/'. $key;
+    $icon = '<i class=" fa fa-home mr-2"></i>';
+    echo '<a href="' . ROOT_DIR . $path . '" class="hover:text-white hover:pl-7 pl-5 bg-[#0000001f] rounded-lg py-2">' . $icon . $value['name'] . '</a>    ';
 }
 ?>
