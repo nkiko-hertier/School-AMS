@@ -42,10 +42,9 @@ class Table {
         $stmt = $this->pdo->prepare("UPDATE $this->table SET $set WHERE $where");
         return $stmt->execute(array_values($data));
     }
-
     public function fetchAll($where = "1") {
-        $stmt = $this->pdo->query("SELECT * FROM $this->table WHERE $where");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = mysqli_query($this->conn, "SELECT * FROM $this->table WHERE $where");
+        return mysqli_fetch_assoc($stmt);
     }
 
     public function delete($where) {

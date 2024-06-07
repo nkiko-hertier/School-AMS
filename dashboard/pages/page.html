@@ -30,6 +30,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
             <tbody class="dark:bg-[#18181b] bg-white divide-y divide-gray-300">
                 <?php
                 $results = new Table($db, $tbl);
+                $results = $results->fetchAll();
                 
                 $tbl   = $_GET['module'];
                 $table = $db_object[$tbl];
