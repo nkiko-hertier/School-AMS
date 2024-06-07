@@ -38,7 +38,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
                     $table = $results; // Assuming fetchAll() gets all the rows
                     foreach ($table as $row) {
                         echo "<tr class='border-none whitespace-nowrap'>";
-                        foreach ($row as $key => $value) {
+                        foreach ($table as $key => $value) {
                             echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . htmlspecialchars($value) . "</td>";
                         }
                         echo "</tr>";
