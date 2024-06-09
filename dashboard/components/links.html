@@ -1,5 +1,6 @@
 <?php
-include_once('../db.php');
+
+include_once($_SERVER['DOCUMENT_ROOT'] . '/db.php');
 /* $links = [
     ['name' => 'Home',      'path' => '',          'icon' => 'fa fa-home'],
     ['name' => 'Customers', 'path' => 'customers', 'icon' => 'fa fa-users'],
@@ -8,8 +9,8 @@ include_once('../db.php');
 ]; */
 
 foreach($db_object as $key => $value) {
-    $path = '/dashboard/page/'. $key;
+    $path = '/dashboard/pages/?module='. $key;
     $icon = '<i class=" fa fa-home mr-2"></i>';
-    echo '<a href="' . __DIR__ . $path . '" class="hover:text-white hover:pl-7 pl-5 bg-[#0000001f] rounded-lg py-2">' . $icon . $key . '</a>    ';
+    echo '<a href="'. $path .'" class="hover:text-white hover:pl-7 pl-5 bg-[#0000001f] rounded-lg py-2">' . $icon . $key . '</a>    ';
 }
 ?>

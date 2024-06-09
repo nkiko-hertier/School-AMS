@@ -3,8 +3,8 @@ include_once('../dashboard/php/conn.php');
 // Database connection
 $servername = "localhost";
 $username = "root";
-$password = "Afri-games123";
-$dbname = "db_lms";
+$password = "";
+$dbname = "school_ams";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 define('CONN', $conn);

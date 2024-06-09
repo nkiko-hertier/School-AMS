@@ -45,7 +45,7 @@ class Table {
     }
     public function fetchAll($where = "1") {
         $stmt = mysqli_query($this->conn, "SELECT * FROM $this->table WHERE $where");
-        return mysqli_fetch_assoc($stmt);
+        return $stmt;
     }
 
     public function delete($where) {

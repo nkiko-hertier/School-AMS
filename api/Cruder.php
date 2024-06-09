@@ -41,7 +41,8 @@ class Cruder {
 
     public function update($id, $data) {
         $columnValuePairs = colValuePairs($data);
-        $sql = "UPDATE customers SET " . implode(", ", $columnValuePairs) . " WHERE id =" . $id;
+        $id_row = ucfirst(substr($this->tableName, 0, -1)) . 'ID';
+        $sql = "UPDATE $this->tableName SET " . implode(", ", $columnValuePairs) . " WHERE $id_row =" . $id;
         return $this->conn->query($sql);
     }
 

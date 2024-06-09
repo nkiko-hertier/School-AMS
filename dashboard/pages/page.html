@@ -7,7 +7,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
 <div class="container h-fit py-12 rounded-md px-4">
 <div class='flex flex-wrap justify-between w-full mb-3 px-5 py-4 p-2'>
   <h1 class='sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-600 dark:text-slate-400'>View <?=$_GET['module']?></h1>
-  <a hidden href="./create" class="block h-fit text-sm w-fit p-2 py-2 bg-indigo-400 dark:bg-[#818cf842] text-white rounded-sm">Add Loarn</a>
+  <a hidden href="<?= '/dashboard/create/?module='. $_GET['module']?>" class="block h-fit text-sm w-fit p-2 py-2 bg-indigo-400 dark:bg-[#818cf842] text-white rounded-sm">Add <?=$_GET['module']?></a>
 </div>
 
     <!-- Table -->
@@ -29,24 +29,26 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
             </thead>
             <tbody class="dark:bg-[#18181b] bg-white divide-y divide-gray-300">
                 <?php
+                $tbl = $_GET['module'];
                 $results = new Table($db, $tbl);
-                $results = $results->fetchAll();
-                
-                $tbl   = $_GET['module'];
                 $tables = $db_object[$tbl];
+                
                 if ($results) {
-                    $table = $results; // Assuming fetchAll() gets all the rows
-                    foreach ($table as $row) {
+                    $rows = $results->fetchAll(); // Fetch all rows once
+                    foreach ($rows as $row) {
                         echo "<tr class='border-none whitespace-nowrap'>";
-                        foreach ($table as $key => $value) {
-                            echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . htmlspecialchars($value) . "</td>";
-                        }
+                        $i = 0;
+                        while($i < count($tables)):
+                        echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . htmlspecialchars($row[$tables[$i]['name']]) . "</td>";
+                        $i++;
+                        endwhile;
                         echo "</tr>";
                     }
                 } else {
                     echo "<tr><td colspan='9' class='border-none px-4 py-2 text-center'>No loans found</td></tr>";
                 }
                 ?>
+                
             </tbody>
         </table>
     </div>

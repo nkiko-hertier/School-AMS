@@ -4,5 +4,5 @@ AddType application/x-httpd-php .html .htm
 
 # Rewrite /dashboard/?page=home to /dashboard/page/home
 RewriteCond %{QUERY_STRING} ^page=([^&]+)$
-RewriteRule ^dashboard/?$ /dashboard/page/%1? [L,R=301]
+RewriteRule ^dashboard/pages/?$ /dashboard/page/%1? [L,R=301]
 

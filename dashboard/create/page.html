@@ -1,0 +1,100 @@
+<?php
+include($_SERVER['DOCUMENT_ROOT'] . '/db.php');
+$labelClass = "leading-7 text-sm text-gray-600 dark:text-gray-300";
+$inputClass = "w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out dark:text-white dark:bg-[#1d1d21] dark:border-none";
+
+$id = $_GET['id'] ?? 0;
+$module = $_GET['module'];
+$tableData = $db_object[$module] ?? [];
+$idName = $tableData[0]['name'];
+if ($id) {
+    $sql = mysqli_query($conn, "SELECT * FROM $module WHERE $idName=$id");
+    $row = mysqli_fetch_assoc($sql);
+}
+?>
+<section class="flex">
+    <div class="wrapper w-full px-12 mx-5 dark:bg-[#18181b]">
+        <?php
+        $cond = ($sql ?? 0) ? mysqli_num_rows($sql) : 1;
+        if(isset($id) && ($cond == 0)):
+            echo("<p class='p-3 dark:text-white text-black'>$module with $id Not Found!</p>");
+        else:
+        ?>
+        <form action="" id="form" class="dark:text-gray-100">
+            <div class="my-5">
+                <h1 class="text-3xl text-gray-700 dark:text-gray-100">New <?= ucfirst($module) ?></h1>
+            </div>
+            <hr class="mb-4 border-gray-700">
+            <input id='moduleId' value="<?=$_GET['id'] ?? '' ?>" hidden>
+            <?php foreach ($tableData as $column): ?>
+                <?php
+                if (isset($column['hidden']) && $column['hidden']) {
+                    continue;
+                }
+                $label = $column['label'];
+                $name = $column['name'];
+                $required = isset($column['required']) && $column['required'] ? 'required' : '';
+                $value = $row[$name] ?? '';
+                switch ($column['type']) {
+                    case 'INT':
+                        $inputType = 'number';
+                        break;
+                    case 'DATE':
+                        $inputType = 'date';
+                        break;
+                    case 'VARCHAR(50)':
+                    case 'VARCHAR(100)':
+                    case 'VARCHAR(15)':
+                    case 'VARCHAR(50)':
+                        $inputType = 'text';
+                        break;
+                    case 'DECIMAL(10, 2)':
+                        $inputType = 'number';
+                        $step = 'step="0.01"';
+                        break;
+                    case 'TEXT':
+                        $inputType = 'textarea';
+                        break;
+                    default:
+                        $inputType = 'text';
+                }
+                ?>
+                <div class="relative">
+                    <label for="<?= $name ?>" class="<?= $labelClass ?>"><?= $label ?></label>
+                    <?php if ($inputType === 'textarea'): ?>
+                        <textarea required id="<?= $name ?>" name="<?= $name ?>" class="<?= $inputClass ?>"> <?= $value ?></textarea>
+                    <?php else: ?>
+                        <input required type="<?= $inputType ?>" id="<?= $name ?>" name="<?= $name ?>" placeholder="<?= $label ?>" value="<?= $value ?>" class="<?= $inputClass ?>" <?= $required ?> <?= $step ?? '' ?>>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+            <div class="relative py-4 mt-3">
+                <button class="block border-none h-fit text-sm p-2 py-2 bg-indigo-600 hover:bg-indigo-800 rounded-sm text-white rounded-sm"><?= (!empty($id) ? 'Update' : 'Add') . ' ' . ucfirst($module) ?></button>
+            </div>
+        </form>
+        <?php
+
+        endif;
+        ?>
+    </div>
+</section>
+<script type="text/javascript">
+    const MyForm = document.getElementById('form');
+    MyForm.addEventListener('submit', (e) => {
+        let method = 'POST';
+        let url = "/api/?modelName=<?= $module ?>";
+        e.preventDefault();
+        let submitData = {
+            <?php foreach ($tableData as $column): ?>
+                <?php if (!(isset($column['hidden']) && $column['hidden'])): ?>
+                    <?= $column['name'] ?>: <?= ($column['type'] === 'INT' || $column['type'] === 'DECIMAL(10, 2)') ? 'parseInt' : '' ?>(<?= $column['name'] ?>.value),
+                <?php endif; ?>
+            <?php endforeach; ?>
+        };
+        if ('<?=$_GET['id'] ?? ''?>' !== '') {
+            url += "&id=" + parseInt(<?=$_GET['id'] ?? ''?>);
+            method = 'PUT';
+        }
+        DataSubmitter(method, url, submitData);
+    });
+</script>
