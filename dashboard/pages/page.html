@@ -20,11 +20,14 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
                 $table = $db_object[$tbl];
                 //!$table && die('No data found for selcted table');
                 foreach($table as $key){
+                    if($key['name'] !== 'password'):
                 ?>
                     <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100"><?=$key['name']?></th>
                 <?php
+                endif;
                 }
                 ?>
+                <th class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">Modify</th>
                 </tr>
             </thead>
             <tbody class="dark:bg-[#18181b] bg-white divide-y divide-gray-300">
@@ -32,20 +35,28 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/php/conn.php');
                 $tbl = $_GET['module'];
                 $results = new Table($db, $tbl);
                 $tables = $db_object[$tbl];
+                $rows = $results->fetchAll(); // Fetch all rows once
                 
-                if ($results) {
+                if ($results && (mysqli_num_rows($rows)!==0)) {
                     $rows = $results->fetchAll(); // Fetch all rows once
                     foreach ($rows as $row) {
                         echo "<tr class='border-none whitespace-nowrap'>";
                         $i = 0;
                         while($i < count($tables)):
+                        if($tables[$i]['name'] !== 'password'):
                         echo "<td class='border-none px-6 py-4 text-sm text-gray-500 dark:text-slate-300'>" . htmlspecialchars($row[$tables[$i]['name']]) . "</td>";
+                        endif;
                         $i++;
                         endwhile;
+                        ?>
+                        <td class="px-6 py-2 text-xs text-gray-500 dark:text-slate-100">
+                            <a class="p-1 dark:bg-[#393f994a] dark:text-blue-500" href="/dashboard/create/?module=<?=$_GET['module']?>&id=<?=$row[$tables[0]['name']]?>">Edit</a>
+                        </th>
+                        <?php
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='9' class='border-none px-4 py-2 text-center'>No loans found</td></tr>";
+                    echo "<tr><td colspan='9' class='border-none px-4 py-2 text-center'>No ". $_GET['module'] ." found</td></tr>";
                 }
                 ?>
                 
